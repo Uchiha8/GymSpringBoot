@@ -15,4 +15,6 @@ public class TrainingController {
     public TrainingController(TrainingService trainingService) {
         this.trainingService = trainingService;
     }
+
+
 }

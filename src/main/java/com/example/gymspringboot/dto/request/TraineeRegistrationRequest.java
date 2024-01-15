@@ -22,6 +22,4 @@ public class TraineeRegistrationRequest {
     @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
     private String address;
-
-
 }
