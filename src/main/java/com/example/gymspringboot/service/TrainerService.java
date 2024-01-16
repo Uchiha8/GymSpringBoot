@@ -3,10 +3,7 @@ package com.example.gymspringboot.service;
 import com.example.gymspringboot.domain.*;
 import com.example.gymspringboot.dto.request.TrainerRegistrationRequest;
 import com.example.gymspringboot.dto.request.UpdateTrainerRequest;
-import com.example.gymspringboot.dto.response.RegistrationResponse;
-import com.example.gymspringboot.dto.response.TraineeListResponse;
-import com.example.gymspringboot.dto.response.TrainerProfileResponse;
-import com.example.gymspringboot.dto.response.UpdateTrainerResponse;
+import com.example.gymspringboot.dto.response.*;
 import com.example.gymspringboot.repository.TrainerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -73,5 +70,18 @@ public class TrainerService {
             return trainerRepository.deleteByUserUsername(userName);
         }
         return false;
+    }
+
+    public List<ActiveTrainerResponse> findAllActiveTrainersNotAssignedTrainee(String username) {
+        List<Trainer> trainers = trainerRepository.findAll();
+        List<ActiveTrainerResponse> activeTrainerResponses = new ArrayList<>();
+        for (Trainer trainer : trainers) {
+            if (trainer.getUser().getActive()) {
+                if (trainer.getTrainings().stream().noneMatch(training -> training.getTrainee().getUser().getUsername().equals(username))) {
+                    activeTrainerResponses.add(new ActiveTrainerResponse(trainer.getUser().getUsername(), trainer.getUser().getFirstName(), trainer.getUser().getLastName(), trainer.getTrainingType()));
+                }
+            }
+        }
+        return activeTrainerResponses;
     }
 }
