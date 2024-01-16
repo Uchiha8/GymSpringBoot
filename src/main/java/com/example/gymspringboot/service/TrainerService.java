@@ -1,8 +1,7 @@
 package com.example.gymspringboot.service;
 
 import com.example.gymspringboot.domain.*;
-import com.example.gymspringboot.dto.request.TrainerRegistrationRequest;
-import com.example.gymspringboot.dto.request.UpdateTrainerRequest;
+import com.example.gymspringboot.dto.request.*;
 import com.example.gymspringboot.dto.response.*;
 import com.example.gymspringboot.repository.TrainerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,5 +82,29 @@ public class TrainerService {
             }
         }
         return activeTrainerResponses;
+    }
+
+    public List<TrainerTrainingsListResponse> readTrainerTrainingsList(TrainerTrainingListRequest request) {
+        Trainer trainer = trainerRepository.findByUserUsername(request.getUsername());
+        List<Training> trainings = new ArrayList<>(trainer.getTrainings());
+        if (request.getTraineeUsername() != null) {
+            trainings.removeIf(training ->
+                    !training.getTrainee().getUser().getUsername().equals(request.getTraineeUsername()));
+        }
+        return trainings.stream()
+                .map(training -> new TrainerTrainingsListResponse(
+                        training.getTrainingName(),
+                        training.getTrainingDate(),
+                        training.getTrainingType(),
+                        training.getDuration(),
+                        training.getTrainee().getUser().getUsername()
+                )).toList();
+    }
+
+    public boolean activateDeactivateTrainee(ActivateProfileRequest request) {
+        if (existsByUserName(request.getUsername())) {
+            return trainerRepository.updateActive(request.getUsername(), request.getActive());
+        }
+        return false;
     }
 }

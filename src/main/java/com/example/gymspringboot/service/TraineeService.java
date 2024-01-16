@@ -4,7 +4,9 @@ import com.example.gymspringboot.domain.Trainee;
 import com.example.gymspringboot.domain.Trainer;
 import com.example.gymspringboot.domain.Training;
 import com.example.gymspringboot.domain.User;
+import com.example.gymspringboot.dto.request.ActivateProfileRequest;
 import com.example.gymspringboot.dto.request.TraineeRegistrationRequest;
+import com.example.gymspringboot.dto.request.TraineeTrainingsListRequest;
 import com.example.gymspringboot.dto.request.UpdateTraineeRequest;
 import com.example.gymspringboot.dto.response.*;
 import com.example.gymspringboot.repository.TraineeRepository;
@@ -39,18 +41,9 @@ public class TraineeService {
         List<Trainer> trainers = trainee.getTrainings().stream().map(Training::getTrainer).toList();
         List<TrainerListResponse> trainerListResponses = new ArrayList<>();
         if (!trainers.isEmpty()) {
-            trainerListResponses = trainers.stream().map(trainer -> new TrainerListResponse(trainer.getUser().getUsername(),
-                            trainer.getUser().getFirstName(),
-                            trainer.getUser().getLastName(),
-                            trainer.getTrainingType()))
-                    .toList();
+            trainerListResponses = trainers.stream().map(trainer -> new TrainerListResponse(trainer.getUser().getUsername(), trainer.getUser().getFirstName(), trainer.getUser().getLastName(), trainer.getTrainingType())).toList();
         }
-        return new TraineeProfileResponse(trainee.getUser().getFirstName(),
-                trainee.getUser().getLastName(),
-                trainee.getDateOfBirth(),
-                trainee.getAddress(),
-                trainee.getUser().getActive(),
-                trainerListResponses);
+        return new TraineeProfileResponse(trainee.getUser().getFirstName(), trainee.getUser().getLastName(), trainee.getDateOfBirth(), trainee.getAddress(), trainee.getUser().getActive(), trainerListResponses);
     }
 
     public boolean existsByUserName(String userName) {
@@ -62,11 +55,7 @@ public class TraineeService {
         List<Trainer> trainers = trainee.getTrainings().stream().map(Training::getTrainer).toList();
         List<TrainerListResponse> trainerListResponses = new ArrayList<>();
         if (!trainers.isEmpty()) {
-            trainerListResponses = trainers.stream().map(trainer -> new TrainerListResponse(trainer.getUser().getUsername(),
-                            trainer.getUser().getFirstName(),
-                            trainer.getUser().getLastName(),
-                            trainer.getTrainingType()))
-                    .toList();
+            trainerListResponses = trainers.stream().map(trainer -> new TrainerListResponse(trainer.getUser().getUsername(), trainer.getUser().getFirstName(), trainer.getUser().getLastName(), trainer.getTrainingType())).toList();
         }
         trainee.getUser().setFirstName(request.getFirstName());
         trainee.getUser().setLastName(request.getLastName());
@@ -74,13 +63,7 @@ public class TraineeService {
         trainee.setDateOfBirth(request.getDateOfBirth());
         trainee.setAddress(request.getAddress());
         traineeRepository.save(trainee);
-        return new UpdateTraineeResponse(trainee.getUser().getUsername(),
-                trainee.getUser().getFirstName(),
-                trainee.getUser().getLastName(),
-                trainee.getDateOfBirth(),
-                trainee.getAddress(),
-                trainee.getUser().getActive(),
-                trainerListResponses);
+        return new UpdateTraineeResponse(trainee.getUser().getUsername(), trainee.getUser().getFirstName(), trainee.getUser().getLastName(), trainee.getDateOfBirth(), trainee.getAddress(), trainee.getUser().getActive(), trainerListResponses);
     }
 
     public boolean deleteTrainee(String username) {
@@ -88,5 +71,26 @@ public class TraineeService {
             return traineeRepository.deleteByUserUsername(username);
         }
         return false;
+    }
+
+    public List<TraineeTrainingsListResponse> readTraineeTrainingsList(TraineeTrainingsListRequest request) {
+        Trainee trainee = traineeRepository.findByUserUsername(request.getUsername());
+        List<Training> trainings = new ArrayList<>(trainee.getTrainings());
+        if (request.getTrainerUsername() != null) {
+            trainings.removeIf(training ->
+                    !training.getTrainer().getUser().getUsername().equals(request.getTrainerUsername()));
+        }
+        return trainings.stream()
+                .map(training -> new TraineeTrainingsListResponse(
+                        training.getTrainingName(),
+                        training.getTrainingDate(),
+                        training.getTrainer().getTrainingType(),
+                        training.getDuration(),
+                        training.getTrainer().getUser().getUsername()))
+                .toList();
+    }
+
+    public boolean activateDeactivateTrainee(ActivateProfileRequest request) {
+        return traineeRepository.updateActive(request.getUsername(), request.getActive());
     }
 }

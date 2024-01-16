@@ -1,7 +1,11 @@
 package com.example.gymspringboot.controller;
 
+import com.example.gymspringboot.dto.request.TrainingDTORequest;
 import com.example.gymspringboot.service.TrainingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,4 +21,8 @@ public class TrainingController {
     }
 
 
+    @PostMapping(path = "/create")
+    public ResponseEntity<?> create(@RequestBody TrainingDTORequest request) {
+        return ResponseEntity.ok(trainingService.save(request));
+    }
 }
