@@ -34,7 +34,7 @@ public class UserController {
     }
 
     @PutMapping(path = "/updatePassword")
-    public ResponseEntity<?> updatePassword(ChangeLoginRequest request) {
+    public ResponseEntity<?> updatePassword(@RequestBody ChangeLoginRequest request) {
         if (!validation.changeLoginValid(request)) {
             return ResponseEntity.badRequest().body("Invalid request");
         } else if (!userService.existsByUsername(request.getUsername())) {

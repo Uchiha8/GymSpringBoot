@@ -1,7 +1,5 @@
 package com.example.gymspringboot.utils.validation;
 
-import com.example.gymspringboot.domain.Training;
-import com.example.gymspringboot.domain.TrainingType;
 import com.example.gymspringboot.dto.request.*;
 import org.springframework.stereotype.Component;
 
