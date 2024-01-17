@@ -101,7 +101,7 @@ public class TrainerService {
                 )).toList();
     }
 
-    public boolean activateDeactivateTrainee(ActivateProfileRequest request) {
+    public boolean activateDeactivateTrainer(ActivateProfileRequest request) {
         if (existsByUserName(request.getUsername())) {
             return trainerRepository.updateActive(request.getUsername(), request.getActive());
         }

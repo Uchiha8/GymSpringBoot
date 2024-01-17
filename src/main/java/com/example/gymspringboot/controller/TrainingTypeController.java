@@ -11,7 +11,6 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/api/v1/trainingtype")
 public class TrainingTypeController {
-
     private final TrainingTypeService trainingTypeService;
 
     @Autowired

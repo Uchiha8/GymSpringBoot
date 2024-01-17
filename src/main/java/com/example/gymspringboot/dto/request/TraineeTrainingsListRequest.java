@@ -1,5 +1,6 @@
 package com.example.gymspringboot.dto.request;
 
+import jakarta.persistence.Column;
 import lombok.*;
 
 import java.util.Date;
@@ -9,6 +10,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TraineeTrainingsListRequest {
+    @Column(nullable = false)
     private String username;
     private Date periodFrom;
     private Date periodTo;
