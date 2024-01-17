@@ -1,5 +1,7 @@
 package com.example.gymspringboot.service;
 
+import com.example.gymspringboot.domain.Trainee;
+import com.example.gymspringboot.domain.Trainer;
 import com.example.gymspringboot.domain.Training;
 import com.example.gymspringboot.dto.request.TrainingDTORequest;
 import com.example.gymspringboot.repository.TraineeRepository;
@@ -24,13 +26,14 @@ public class TrainingService {
     public Training save(TrainingDTORequest request) {
         //from entity to model
         Training training = new Training();
-        training.setId(null);
-        training.setTrainee(traineeRepository.findByUserUsername(request.getTraineeUsername()));
-        training.setTrainer(trainerRepository.findByUserUsername(request.getTrainerUsername()));
+        Trainee trainee = traineeRepository.findByUserUsername(request.getTraineeUsername());
+        Trainer trainer = trainerRepository.findByUserUsername(request.getTrainerUsername());
+        training.setTrainee(trainee);
+        training.setTrainer(trainer);
         training.setTrainingName(request.getTrainingName());
         training.setTrainingDate(request.getTrainingDate());
         training.setDuration(request.getDuration());
-        training.setTrainingType(trainerRepository.findByUserUsername(request.getTrainerUsername()).getTrainingType());
+        training.setTrainingType(trainer.getTrainingType());
         return trainingRepository.save(training);
     }
 }

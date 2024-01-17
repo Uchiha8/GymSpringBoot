@@ -36,7 +36,7 @@ public class TraineeController {
     }
 
     @GetMapping(path = "/traineeTrainings")
-    public ResponseEntity<?> traineeTrainings(@RequestParam TraineeTrainingsListRequest request) {
+    public ResponseEntity<?> traineeTrainings(@RequestBody TraineeTrainingsListRequest request) {
         if (traineeService.existsByUserName(request.getUsername())) {
             return ResponseEntity.ok(traineeService.readTraineeTrainingsList(request));
         }
