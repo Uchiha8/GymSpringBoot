@@ -60,6 +60,7 @@ public class TraineeService {
         trainee.getUser().setFirstName(request.getFirstName());
         trainee.getUser().setLastName(request.getLastName());
         trainee.getUser().setActive(request.getActive());
+        trainee.getUser().setUsername(userService.usernameGenerator(request.getFirstName(), request.getLastName()));
         trainee.setDateOfBirth(request.getDateOfBirth());
         trainee.setAddress(request.getAddress());
         traineeRepository.save(trainee);
@@ -67,10 +68,14 @@ public class TraineeService {
     }
 
     public boolean deleteTrainee(String username) {
-        if (existsByUserName(username)) {
-            return traineeRepository.deleteByUserUsername(username);
+        Trainee trainee = traineeRepository.findByUserUsername(username);
+        if (trainee != null) {
+            traineeRepository.deleteById(trainee.getId());
         }
-        return false;
+        if (existsByUserName(username)) {
+            return false;
+        }
+        return true;
     }
 
     public List<TraineeTrainingsListResponse> readTraineeTrainingsList(TraineeTrainingsListRequest request) {

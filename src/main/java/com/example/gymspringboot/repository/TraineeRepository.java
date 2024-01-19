@@ -12,8 +12,9 @@ public interface TraineeRepository extends JpaRepository<Trainee, Long> {
     Trainee findByUserUsername(String username);
 
     boolean existsByUserUsername(String username);
-
-    boolean deleteByUserUsername(String username);
+    @Modifying
+    @Query("DELETE FROM Trainee t where t.user.username = :username")
+    boolean deleteByUserUsername(@Param("username") String username);
 
     @Modifying
     @Query("UPDATE Trainee t set t.user.active = :active where t.user.username = :username")

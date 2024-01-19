@@ -80,8 +80,8 @@ public class UserService {
         return password.toString();
     }
 
-    public void delete(Long id) {
-        userRepository.deleteById(id);
+    public void delete(String userName) {
+        userRepository.deleteByUsername(userName);
     }
 
 }

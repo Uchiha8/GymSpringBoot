@@ -22,16 +22,23 @@ repositories {
 }
 
 dependencies {
+    //Spring Boot Actuator
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    //Spring Boot DevTools
+    implementation 'io.micrometer:micrometer-core:1.12.2'
+    implementation 'io.micrometer:micrometer-registry-prometheus:1.12.2'
+    runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+    //Spring Boot Web
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-
+    //Hibernate
     implementation 'org.mapstruct:mapstruct:1.5.4.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.4.Final'
-
+    //Lombok
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'
-
     annotationProcessor 'org.projectlombok:lombok'
+    //Spring Boot Test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
