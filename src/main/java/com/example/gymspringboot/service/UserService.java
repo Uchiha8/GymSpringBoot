@@ -48,18 +48,6 @@ public class UserService {
         return userRepository.existsByUsername(userName);
     }
 
-    public User update(User user) {
-        User updateUser = userRepository.findByUsername(user.getUsername());
-        if (updateUser != null) {
-            updateUser.setFirstName(user.getFirstName());
-            updateUser.setLastName(user.getLastName());
-            updateUser.setActive(user.getActive());
-            save(updateUser);
-            return updateUser;
-        }
-        return null;
-    }
-
     public String usernameGenerator(String firstName, String lastName) {
         String username = firstName.toLowerCase() + "." + lastName.toLowerCase();
         if (existsByUsername(username)) {
@@ -79,9 +67,4 @@ public class UserService {
         }
         return password.toString();
     }
-
-    public void delete(String userName) {
-        userRepository.deleteByUsername(userName);
-    }
-
 }
