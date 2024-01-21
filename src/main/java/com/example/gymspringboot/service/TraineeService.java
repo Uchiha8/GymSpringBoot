@@ -18,7 +18,6 @@ import java.util.List;
 
 @Service
 public class TraineeService {
-
     private final TraineeRepository traineeRepository;
     private final UserService userService;
 

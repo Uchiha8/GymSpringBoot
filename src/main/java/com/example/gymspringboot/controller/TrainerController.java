@@ -1,8 +1,6 @@
 package com.example.gymspringboot.controller;
 
-import com.example.gymspringboot.dto.request.ActivateProfileRequest;
-import com.example.gymspringboot.dto.request.TrainerRegistrationRequest;
-import com.example.gymspringboot.dto.request.UpdateTrainerRequest;
+import com.example.gymspringboot.dto.request.*;
 import com.example.gymspringboot.service.TraineeService;
 import com.example.gymspringboot.service.TrainerService;
 import com.example.gymspringboot.utils.validation.ValidationModelRequest;
@@ -48,6 +46,16 @@ public class TrainerController {
             return ResponseEntity.ok(trainerService.findAllActiveTrainersNotAssignedTrainee(username));
         }
         return ResponseEntity.badRequest().body("Trainee not found with username: " + username);
+    }
+
+    @GetMapping(path = "/traineeTrainings")
+    public ResponseEntity<?> traineeTrainings(@RequestBody TrainerTrainingListRequest request) {
+        if (!validation.trainerTrainingsValid(request)) {
+            return ResponseEntity.badRequest().body("Invalid request");
+        } else if (!trainerService.existsByUserName(request.getUsername())) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Trainer not found with username: " + request.getUsername());
+        }
+        return ResponseEntity.ok(trainerService.readTrainerTrainingsList(request));
     }
 
     @PutMapping(path = "/update")
