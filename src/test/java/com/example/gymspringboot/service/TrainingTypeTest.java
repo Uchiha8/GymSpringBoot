@@ -57,7 +57,7 @@ public class TrainingTypeTest {
         // Given
         List<TrainingType> trainingTypes = List.of(
                 new TrainingType(1L, "Type1"),
-                new TrainingType(2L, "Type2")
+                new TrainingType(2L, "Type2"gi)
         );
         when(trainingTypeRepository.findAll()).thenReturn(trainingTypes);
 
