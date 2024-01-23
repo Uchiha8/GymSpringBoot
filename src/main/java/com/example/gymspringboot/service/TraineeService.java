@@ -66,15 +66,9 @@ public class TraineeService {
         return new UpdateTraineeResponse(trainee.getUser().getUsername(), trainee.getUser().getFirstName(), trainee.getUser().getLastName(), trainee.getDateOfBirth(), trainee.getAddress(), trainee.getUser().getActive(), trainerListResponses);
     }
 
-    public boolean deleteTrainee(String username) {
+    public void deleteTrainee(String username) {
         Trainee trainee = traineeRepository.findByUserUsername(username);
-        if (trainee != null) {
-            traineeRepository.deleteById(trainee.getId());
-        }
-        if (existsByUserName(username)) {
-            return false;
-        }
-        return true;
+        traineeRepository.deleteById(trainee.getId());
     }
 
     public List<TraineeTrainingsListResponse> readTraineeTrainingsList(TraineeTrainingsListRequest request) {
@@ -94,7 +88,12 @@ public class TraineeService {
                 .toList();
     }
 
-    public boolean activateDeactivateTrainee(ActivateProfileRequest request) {
-        return traineeRepository.updateActive(request.getUsername(), request.getActive());
+    public void activateDeactivateTrainee(ActivateProfileRequest request) {
+        Trainee trainee = traineeRepository.findByUserUsername(request.getUsername());
+        if (trainee.getUser().getActive() == request.getActive()) {
+            throw new RuntimeException("Trainee already " + (request.getActive() ? "activated" : "deactivated"));
+        }
+        trainee.getUser().setActive(request.getActive());
+        traineeRepository.save(trainee);
     }
 }

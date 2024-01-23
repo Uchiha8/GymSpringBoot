@@ -28,4 +28,10 @@ public class TrainingTypeService {
         return trainingTypeRepository.findAll();
     }
 
+    public boolean existsTrainingTypeByName(String name) {
+        return trainingTypeRepository.existsTrainingTypeByName(name);
+    }
+
+
+
 }

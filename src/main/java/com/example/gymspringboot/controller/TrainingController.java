@@ -30,9 +30,11 @@ public class TrainingController {
         if (!validation.trainingDtoValid(request)) {
             return ResponseEntity.badRequest().body("Invalid request");
         }
-        if (trainingService.save(request) != null) {
-            return ResponseEntity.status(HttpStatus.CREATED).body("Training created");
+        try {
+            trainingService.save(request);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Training created successfully");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Something went from");
     }
 }

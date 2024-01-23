@@ -64,11 +64,9 @@ public class TrainerService {
         return new UpdateTrainerResponse(trainer.getUser().getUsername(), trainer.getUser().getFirstName(), trainer.getUser().getLastName(), trainer.getTrainingType(), trainer.getUser().getActive(), traineeListResponses);
     }
 
-    public boolean delete(String userName) {
-        if (existsByUserName(userName)) {
-            return trainerRepository.deleteByUserUsername(userName);
-        }
-        return false;
+    public void delete(String userName) {
+        Trainer trainer = trainerRepository.findByUserUsername(userName);
+        trainerRepository.deleteById(trainer.getId());
     }
 
     public List<ActiveTrainerResponse> findAllActiveTrainersNotAssignedTrainee(String username) {
@@ -101,10 +99,12 @@ public class TrainerService {
                 )).toList();
     }
 
-    public boolean activateDeactivateTrainer(ActivateProfileRequest request) {
-        if (existsByUserName(request.getUsername())) {
-            return trainerRepository.updateActive(request.getUsername(), request.getActive());
+    public void activateDeactivateTrainer(ActivateProfileRequest request) {
+        Trainer trainer = trainerRepository.findByUserUsername(request.getUsername());
+        if (trainer.getUser().getActive() == request.getActive()) {
+            throw new RuntimeException("Trainer already " + (request.getActive() ? "activated" : "deactivated"));
         }
-        return false;
+        trainer.getUser().setActive(request.getActive());
+        trainerRepository.save(trainer);
     }
 }

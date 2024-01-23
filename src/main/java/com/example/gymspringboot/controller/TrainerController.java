@@ -75,14 +75,20 @@ public class TrainerController {
         } else if (!trainerService.existsByUserName(request.getUsername())) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Trainer not found with username: " + request.getUsername());
         }
-        return ResponseEntity.ok(trainerService.activateDeactivateTrainer(request));
+        try {
+            trainerService.activateDeactivateTrainer(request);
+            return ResponseEntity.ok("Trainer " + (request.getActive() ? "activated" : "deactivated"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @DeleteMapping(path = "/delete")
     public ResponseEntity<?> delete(@RequestParam String userName) {
-        if (trainerService.existsByUserName(userName)) {
-            return ResponseEntity.ok(trainerService.delete(userName));
+        if (!trainerService.existsByUserName(userName)) {
+            return ResponseEntity.badRequest().body("Trainer not found with username: " + userName);
         }
-        return ResponseEntity.badRequest().body("Trainer not found with username: " + userName);
+        trainerService.delete(userName);
+        return ResponseEntity.ok("Trainer deleted");
     }
 }

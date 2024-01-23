@@ -27,7 +27,13 @@ public class TrainingService {
         //from entity to model
         Training training = new Training();
         Trainee trainee = traineeRepository.findByUserUsername(request.getTraineeUsername());
+        if (trainee == null) {
+            throw new RuntimeException("Trainee not found with username: " + request.getTraineeUsername());
+        }
         Trainer trainer = trainerRepository.findByUserUsername(request.getTrainerUsername());
+        if (trainer == null) {
+            throw new RuntimeException("Trainer not found with username: " + request.getTrainerUsername());
+        }
         training.setTrainee(trainee);
         training.setTrainer(trainer);
         training.setTrainingName(request.getTrainingName());

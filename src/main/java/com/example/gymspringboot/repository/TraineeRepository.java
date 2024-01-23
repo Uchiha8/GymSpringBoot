@@ -19,4 +19,5 @@ public interface TraineeRepository extends JpaRepository<Trainee, Long> {
     @Modifying
     @Query("UPDATE Trainee t set t.user.active = :active where t.user.username = :username")
     boolean updateActive(@Param("username") String username, @Param("active") boolean active);
+
 }

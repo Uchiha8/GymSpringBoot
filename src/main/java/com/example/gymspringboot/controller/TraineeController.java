@@ -67,7 +67,12 @@ public class TraineeController {
         } else if (!traineeService.existsByUserName(request.getUsername())) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Trainee not found with username: " + request.getUsername());
         }
-        return ResponseEntity.ok(traineeService.activateDeactivateTrainee(request));
+        try {
+            traineeService.activateDeactivateTrainee(request);
+            return ResponseEntity.ok("Trainee " + (request.getActive() ? "activated" : "deactivated"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @DeleteMapping(path = "/delete")
@@ -75,7 +80,8 @@ public class TraineeController {
         if (!traineeService.existsByUserName(userName)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Trainee not found with username: " + userName);
         }
-        return ResponseEntity.ok(traineeService.deleteTrainee(userName));
+        traineeService.deleteTrainee(userName);
+        return ResponseEntity.ok("Trainee deleted");
     }
 
 }
