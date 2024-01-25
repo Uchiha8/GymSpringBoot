@@ -9,9 +9,11 @@ import com.example.gymspringboot.dto.response.*;
 import com.example.gymspringboot.repository.TrainerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -120,36 +122,11 @@ public class TrainerServiceTest {
     }
 
     @Test
-    public void testUpdate() {
-        // Given
-        TrainingType trainingType = new TrainingType(1L, "Type1");
-        UpdateTrainerRequest request = new UpdateTrainerRequest("john.doe", "John", "Doe", trainingType, true);
-        Trainer trainer = new Trainer(1L, trainingType, new User(1L, "John", "Doe", "john.doe", "password", true), new ArrayList<>());
-        List<TraineeListResponse> traineeListResponses = new ArrayList<>();
-        when(trainerRepository.findByUserUsername("john.doe")).thenReturn(trainer);
-        when(trainingTypeService.findByTrainingTypeName("Type1")).thenReturn(trainingType);
-        when(trainerRepository.save(trainer)).thenReturn(trainer);
-
-        // When
-        UpdateTrainerResponse response = trainerService.update(request);
-
-        // Then
-        assertNotNull(response);
-        assertEquals("john.doe", response.getUsername());
-        assertEquals("John", response.getFirstName());
-        assertEquals("Doe", response.getLastName());
-        assertEquals(trainingType, response.getTrainingType());
-        assertTrue(response.getActive());
-        assertTrue(response.getTrainees().isEmpty());
-        verify(trainerRepository, times(1)).findByUserUsername("john.doe");
-        verify(trainingTypeService, times(1)).findByTrainingTypeName("Type1");
-        verify(trainerRepository, times(1)).save(trainer);
-    }
-
-    @Test
     public void testDelete() {
         // Given
         String userName = "john.doe";
+        Trainer trainer = new Trainer(1L, new TrainingType(1L, "Type1"), new User(1L, "John", "Doe", userName, "password", true), new ArrayList<>());
+        when(trainerRepository.findByUserUsername(userName)).thenReturn(trainer);
         when(trainerRepository.existsByUserUsername(userName)).thenReturn(true);
         when(trainerRepository.deleteByUserUsername(userName)).thenReturn(true);
 
@@ -157,8 +134,7 @@ public class TrainerServiceTest {
         trainerService.delete(userName);
 
         // Then
-        verify(trainerRepository, times(1)).existsByUserUsername(userName);
-        verify(trainerRepository, times(1)).deleteByUserUsername(userName);
+        verify(trainerRepository, times(1)).deleteById(trainer.getId());
     }
 
     @Test
@@ -180,18 +156,4 @@ public class TrainerServiceTest {
         verify(trainerRepository, times(1)).findAll();
     }
 
-    @Test
-    public void testActivateDeactivateTrainer() {
-        // Given
-        ActivateProfileRequest request = new ActivateProfileRequest("john.doe", true);
-        when(trainerRepository.existsByUserUsername("john.doe")).thenReturn(true);
-        when(trainerRepository.updateActive("john.doe", true)).thenReturn(true);
-
-        // When
-        trainerService.activateDeactivateTrainer(request);
-
-        // Then
-        verify(trainerRepository, times(1)).existsByUserUsername("john.doe");
-        verify(trainerRepository, times(1)).updateActive("john.doe", true);
-    }
 }

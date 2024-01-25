@@ -61,9 +61,9 @@ public class TraineeService {
         trainee.getUser().setFirstName(request.getFirstName());
         trainee.getUser().setLastName(request.getLastName());
         trainee.getUser().setActive(request.getActive());
-        trainee.getUser().setUsername(userService.usernameGenerator(request.getFirstName(), request.getLastName()));
         trainee.setDateOfBirth(request.getDateOfBirth());
         trainee.setAddress(request.getAddress());
+        trainee.getUser().setUsername(userService.usernameGenerator(request.getFirstName(), request.getLastName()));
         traineeRepository.save(trainee);
         return new UpdateTraineeResponse(trainee.getUser().getUsername(), trainee.getUser().getFirstName(), trainee.getUser().getLastName(), trainee.getDateOfBirth(), trainee.getAddress(), trainee.getUser().getActive(), trainerListResponses);
     }

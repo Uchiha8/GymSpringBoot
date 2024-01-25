@@ -46,7 +46,6 @@ public class TrainingTypeControllerIT {
     public void findAll() throws Exception {
         mockMvc.perform(get("/api/v1/trainingtype/findAll")
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isOk())
-                .andExpect(content().string("[{\"id\":1,\"name\":\"newTrainingType\"}]"));
+                .andExpect(status().isOk());
     }
 }

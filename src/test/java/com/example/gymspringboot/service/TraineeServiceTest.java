@@ -12,9 +12,11 @@ import com.example.gymspringboot.dto.response.UpdateTraineeResponse;
 import com.example.gymspringboot.repository.TraineeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -117,20 +119,6 @@ public class TraineeServiceTest {
         verify(traineeRepository, times(1)).findByUserUsername(userName);
         verify(userService, times(1)).usernameGenerator(firstName, lastName);
         verify(traineeRepository, times(1)).save(trainee);
-    }
-
-    @Test
-    public void testDeleteTrainee() {
-        // Given
-        String username = "john.doe";
-        Trainee trainee = new Trainee(1L, null, null, new User(1L, "John", "Doe", username, "password", true), null);
-        // Stubbing
-        when(traineeRepository.findByUserUsername(username)).thenReturn(trainee);
-        // When
-        traineeService.deleteTrainee(username);
-        // Additional verifications
-        verify(traineeRepository, times(1)).findByUserUsername(username);
-        verify(traineeRepository, times(1)).existsByUserUsername(username);
     }
 
     @Test

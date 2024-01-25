@@ -3,15 +3,17 @@ package com.example.gymspringboot.service;
 import com.example.gymspringboot.domain.TrainingType;
 import com.example.gymspringboot.repository.TrainingTypeRepository;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-
+@ExtendWith(MockitoExtension.class)
 public class TrainingTypeTest {
     @Mock
     private TrainingTypeRepository trainingTypeRepository;

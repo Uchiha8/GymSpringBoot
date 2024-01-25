@@ -48,8 +48,8 @@ public class TrainerController {
         return ResponseEntity.badRequest().body("Trainee not found with username: " + username);
     }
 
-    @GetMapping(path = "/traineeTrainings")
-    public ResponseEntity<?> traineeTrainings(@RequestBody TrainerTrainingListRequest request) {
+    @GetMapping(path = "/trainerTrainings")
+    public ResponseEntity<?> trainerTrainings(@RequestBody TrainerTrainingListRequest request) {
         if (!validation.trainerTrainingsValid(request)) {
             return ResponseEntity.badRequest().body("Invalid request");
         } else if (!trainerService.existsByUserName(request.getUsername())) {
