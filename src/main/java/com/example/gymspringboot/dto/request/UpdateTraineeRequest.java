@@ -24,3 +24,4 @@ public class UpdateTraineeRequest {
     @Column(nullable = false)
     private Boolean active;
 }
+

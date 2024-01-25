@@ -10,6 +10,7 @@ import com.example.gymspringboot.dto.request.TraineeTrainingsListRequest;
 import com.example.gymspringboot.dto.request.UpdateTraineeRequest;
 import com.example.gymspringboot.dto.response.*;
 import com.example.gymspringboot.repository.TraineeRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class TraineeService {
     private final TraineeRepository traineeRepository;
     private final UserService userService;

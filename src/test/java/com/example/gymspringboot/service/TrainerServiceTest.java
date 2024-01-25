@@ -154,10 +154,9 @@ public class TrainerServiceTest {
         when(trainerRepository.deleteByUserUsername(userName)).thenReturn(true);
 
         // When
-        boolean result = trainerService.delete(userName);
+        trainerService.delete(userName);
 
         // Then
-        assertTrue(result);
         verify(trainerRepository, times(1)).existsByUserUsername(userName);
         verify(trainerRepository, times(1)).deleteByUserUsername(userName);
     }
@@ -189,10 +188,9 @@ public class TrainerServiceTest {
         when(trainerRepository.updateActive("john.doe", true)).thenReturn(true);
 
         // When
-        boolean result = trainerService.activateDeactivateTrainer(request);
+        trainerService.activateDeactivateTrainer(request);
 
         // Then
-        assertTrue(result);
         verify(trainerRepository, times(1)).existsByUserUsername("john.doe");
         verify(trainerRepository, times(1)).updateActive("john.doe", true);
     }

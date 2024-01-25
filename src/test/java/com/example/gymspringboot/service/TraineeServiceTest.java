@@ -126,11 +126,8 @@ public class TraineeServiceTest {
         Trainee trainee = new Trainee(1L, null, null, new User(1L, "John", "Doe", username, "password", true), null);
         // Stubbing
         when(traineeRepository.findByUserUsername(username)).thenReturn(trainee);
-        when(traineeRepository.existsByUserUsername(username)).thenReturn(true);
         // When
-        boolean result = traineeService.deleteTrainee(username);
-        // Then
-        assertFalse(result);
+        traineeService.deleteTrainee(username);
         // Additional verifications
         verify(traineeRepository, times(1)).findByUserUsername(username);
         verify(traineeRepository, times(1)).existsByUserUsername(username);
@@ -159,15 +156,13 @@ public class TraineeServiceTest {
         String username = "john.doe";
         boolean activeStatus = true;
         ActivateProfileRequest request = new ActivateProfileRequest(username, activeStatus);
+        Trainee trainee = new Trainee(1L, null, null, new User(1L, "John", "Doe", username, "password", false), null);
         // Stubbing
-        when(traineeRepository.updateActive(username, activeStatus)).thenReturn(true);
+        when(traineeRepository.findByUserUsername(username)).thenReturn(trainee);
         // When
-        boolean result = traineeService.activateDeactivateTrainee(request);
-        // Then
-        assertTrue(result);
+        traineeService.activateDeactivateTrainee(request);
         // Additional verifications
-        verify(traineeRepository, times(1)).updateActive(username, activeStatus);
+        verify(traineeRepository, times(1)).findByUserUsername(username);
+        verify(traineeRepository, times(1)).save(trainee);
     }
-
-
 }

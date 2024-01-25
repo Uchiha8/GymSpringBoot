@@ -58,6 +58,7 @@ public class TrainerService {
         TrainingType trainingType = trainingTypeService.findByTrainingTypeName(request.getTrainingType().getName());
         trainer.getUser().setFirstName(request.getFirstName());
         trainer.getUser().setLastName(request.getLastName());
+        trainer.getUser().setUsername(userService.usernameGenerator(request.getFirstName(), request.getLastName()));
         trainer.getUser().setActive(request.getActive());
         trainer.setTrainingType(trainingType);
         trainerRepository.save(trainer);
