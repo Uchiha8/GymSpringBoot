@@ -86,8 +86,7 @@ public class TraineeService {
                         training.getTrainingDate(),
                         training.getTrainer().getTrainingType(),
                         training.getDuration(),
-                        training.getTrainer().getUser().getUsername()))
-                .toList();
+                        training.getTrainer().getUser().getUsername())).toList();
     }
 
     public void activateDeactivateTrainee(ActivateProfileRequest request) {

@@ -19,25 +19,9 @@ public class LoggingAspect {
     public void loggingTargets() {
     }
 
-    @Before("loggingTargets()")
-    public void logBeforeExecution(JoinPoint joinPoint) {
-        LOGGER.info("Executing method: {}.{} with arguments {}", joinPoint.getSignature().getDeclaringTypeName(), joinPoint.getSignature().getName(), Arrays.asList(joinPoint.getArgs()));
-    }
-
-    @Around("loggingTargets()")
-    public Object logDuringExecution(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-        long start = System.nanoTime();
-        Object proceed = proceedingJoinPoint.proceed();
-        long end = System.nanoTime();
-        LOGGER.info("Execution of {}.{} took {} milliseconds",
-                proceedingJoinPoint.getSignature().getDeclaringTypeName(), proceedingJoinPoint.getSignature().getName(),
-                TimeUnit.NANOSECONDS.toMillis(end - start));
-        return proceed;
-    }
-
     @AfterReturning(value = "loggingTargets()", returning = "value")
     public void logAfterExecution(JoinPoint joinPoint, Object value) {
-        LOGGER.info("Method {}.{} executed and returned value [{}]", joinPoint.getSignature().getDeclaringTypeName(), joinPoint.getSignature().getName(), value);
+        LOGGER.info("{} executed and returned value [{}]", joinPoint.getSignature().getName(), value);
     }
 
 

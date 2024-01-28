@@ -21,7 +21,8 @@ public class UserController {
     }
 
     @GetMapping(path = "/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<?> login(@RequestParam String username, @RequestParam String password) {
+        LoginRequest request = new LoginRequest(username, password);
         if (!validation.loginValid(request)) {
             return ResponseEntity.badRequest().body("Invalid request");
         } else if (!userService.existsByUsername(request.getUsername())) {
